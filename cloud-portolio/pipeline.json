@@ -1,0 +1,58 @@
+{
+  "pipeline": {
+    "name": "Portfolio-Automated-Pipeline",
+    "roleArn": "arn:aws:iam::627994960201:role/CodeBuildServiceRole",
+    "artifactStore": {
+      "type": "S3",
+      "location": "rravi-dev-portfolio-2026"
+    },
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "GitHub_Source",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "AWS",
+              "provider": "CodeStarSourceConnection",
+              "version": "1"
+            },
+            "outputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "configuration": {
+              "ConnectionArn": "arn:aws:codeconnections:ap-south-1:627994960201:connection/1c84ae09-2736-4aa5-83ae-32106a5f6742",
+              "FullRepositoryId": "RRavi20/The-Automated-Cloud-Portfolio",
+              "BranchName": "main"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Build_and_Deploy",
+        "actions": [
+          {
+            "name": "Build_and_Deploy_Action",
+            "actionTypeId": {
+              "category": "Build",
+              "owner": "AWS",
+              "provider": "CodeBuild",
+              "version": "1"
+            },
+            "inputArtifacts": [
+              {
+                "name": "SourceArtifact"
+              }
+            ],
+            "configuration": {
+              "ProjectName": "Portfolio-Build"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
